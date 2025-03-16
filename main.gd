@@ -21,8 +21,9 @@ func _ready():
 	#Change the size of the window
 	_MainWindow.min_size = player_size
 	_MainWindow.size = _MainWindow.min_size
+
 	#Places the character in the middle of the screen and on top of the taskbar
-	_MainWindow.position = Vector2i(DisplayServer.screen_get_size().x/2 - (player_size.x/2), taskbar_pos)
+	_MainWindow.position = Vector2i(int(DisplayServer.screen_get_size().x / 2.0) - int(player_size.x / 2.0), taskbar_pos)
 
 func _process(delta):
 	if selected:
@@ -36,9 +37,13 @@ func _process(delta):
 
 func follow_mouse():
 	#Follows mouse cursor but clamps it on the taskbar
-	_MainWindow.position = Vector2i(clamp_on_screen_width((get_global_mouse_position().x 
-		 + mouse_offset.x),
-		 player_size.x), taskbar_pos) 
+	_MainWindow.position = Vector2i(
+		clamp_on_screen_width(
+			(get_global_mouse_position().x + mouse_offset.x), 
+			player_size.x
+		), 
+		taskbar_pos
+	) 
 
 func move_pet():
 	#On right click and hold it will follow the pet and when released
@@ -54,12 +59,17 @@ func clamp_on_screen_width(pos, player_width):
 
 func walk(delta):
 	#Moves the pet
-	_MainWindow.position.x = _MainWindow.position.x + WALK_SPEED * delta * walk_direction
+	_MainWindow.position.x += roundi(WALK_SPEED * delta * walk_direction)
+
 	#Clamps the pet position on the width of screen
-	_MainWindow.position.x = clampi(_MainWindow.position.x, 0
-			,clamp_on_screen_width(_MainWindow.position.x, player_size.x))
+	_MainWindow.position.x = clampi(
+		_MainWindow.position.x, 
+		0,
+		clamp_on_screen_width(_MainWindow.position.x, player_size.x)
+	)
+
 	#Changes direction if it hits the sides of the screen
-	if ((_MainWindow.position.x == (screen_width - player_size.x)) or (_MainWindow.position.x == 0)):
+	if _MainWindow.position.x == 0 or _MainWindow.position.x == screen_width - player_size.x:
 		walk_direction = walk_direction * -1
 		char_sprite.flip_h = !char_sprite.flip_h
 

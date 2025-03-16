@@ -29,16 +29,16 @@ func _on_timer_timeout():
 	#Timer can change according to state and is random
 	match pet_state:
 		STATE.IDLE :
-			timer.set_wait_time(randi_range(10, 200))
+			timer.set_wait_time(randi_range(3, 10))
 			sprite.play("idle")
 		STATE.LOOKAROUND :
-			timer.set_wait_time(randi_range(10, 200))
+			timer.set_wait_time(randi_range(3, 8))
 			sprite.play("look_around")
 		STATE.WALK :
 			timer.set_wait_time(randi_range(5, 60))
 			sprite.play("walk")
 		STATE.SLEEP :
-			timer.set_wait_time(randi_range(300, 1000))
+			timer.set_wait_time(randi_range(10, 20))
 			sprite.play("sleep")
 	timer.start()
 
